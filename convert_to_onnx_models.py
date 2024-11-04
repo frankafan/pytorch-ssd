@@ -17,6 +17,7 @@ net_type = sys.argv[1]
 model_path = sys.argv[2]
 
 label_path = sys.argv[3]
+custom_directory = sys.argv[4] if len(sys.argv) > 4 else ''
 
 class_names = [name.strip() for name in open(label_path).readlines()]
 num_classes = len(class_names)
@@ -37,11 +38,11 @@ else:
 net.load(model_path)
 net.eval()
 
-model_path = f"models/{net_type}.onnx"
-init_net_path = f"models/{net_type}_init_net.pb"
-init_net_txt_path = f"models/{net_type}_init_net.pbtxt"
-predict_net_path = f"models/{net_type}_predict_net.pb"
-predict_net_txt_path = f"models/{net_type}_predict_net.pbtxt"
+model_path = f"{custom_directory}models/{net_type}.onnx"
+init_net_path = f"{custom_directory}models/{net_type}_init_net.pb"
+init_net_txt_path = f"{custom_directory}models/{net_type}_init_net.pbtxt"
+predict_net_path = f"{custom_directory}models/{net_type}_predict_net.pb"
+predict_net_txt_path = f"{custom_directory}models/{net_type}_predict_net.pbtxt"
 
 dummy_input = torch.randn(1, 3, 300, 300)
 torch.onnx.export(net, dummy_input, model_path, verbose=False, output_names=['scores', 'boxes'])
